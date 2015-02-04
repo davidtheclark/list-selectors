@@ -139,7 +139,8 @@ console.log(result);
 // ... do other things with result
 ```
 
-Or with Gulp ;and [gulp-postcss](https://github.com/w0rm/gulp-postcss), you can just string it in there with your other plugins
+Or with Gulp and [gulp-postcss](https://github.com/w0rm/gulp-postcss), you can just string it in there with your other plugins.
+
 ```js
 var gulp = require('gulp');
 var gulpPostcss = require('gulp-postcss');
