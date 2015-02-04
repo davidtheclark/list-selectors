@@ -1,0 +1,18 @@
+* {}
+.class {}
+#id {}
+[attribute] {}
+div {}
+
+.class.class2 {}
+.class .class3 {}
+.class > .class4 {}
+.class + .class5 {}
+.class ~ .class6 {}
+
+.class7, #id2, span {}
+
+.class:hover {}
+.class::before {}
+.class:first-child {}
+.class:not(.class8) {}

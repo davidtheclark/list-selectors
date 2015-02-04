@@ -1,0 +1,48 @@
+{
+  "name": "list-selectors",
+  "author": {
+    "name": "David Clark",
+    "email": "david.dave.clark@gmail.com",
+    "url": "http://davidtheclark.com"
+  },
+  "bin": {
+    "list-selectors": "./bin.js"
+  },
+  "license": "MIT",
+  "version": "0.1.0",
+  "description": "List the selectors used in your CSS. Use as a standalone function, CLI, or PostCSS plugin.",
+  "homepage": "https://github.com/davidtheclark/list-selectors",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/davidtheclark/list-selectors.git"
+  },
+  "keywords": [
+    "css",
+    "analytics",
+    "postcss",
+    "postcss-plugin"
+  ],
+  "files": [
+    "lib/*.js",
+    "index.js",
+    "bin.js",
+    "LICENSE",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint index.js test/index.js",
+    "test": "npm run lint && tape test"
+  },
+  "devDependencies": {
+    "eslint": "^0.13.0",
+    "lodash": "^3.0.1",
+    "tape": "^3.0.0"
+  },
+  "dependencies": {
+    "globby": "^1.1.0",
+    "minimist": "^1.1.0",
+    "postcss": "^4.0.0"
+  }
+}
