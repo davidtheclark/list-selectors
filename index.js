@@ -43,10 +43,18 @@ function listSelectorsPostcss(opts, cb, cssTree) {
 
   var accumulatedSelectors = [];
   cssTree.eachRule(function(rule) {
+    // Ignore keyframes, which can log e.g. 10%, 20% as selectors
+    if (rule.parent.type === 'atrule' && /keyframes/.test(rule.parent.name)) { return; }
+
     rule.selectors.forEach(function(selector) {
       accumulatedSelectors.push(selector);
     });
   });
+
+  if (_.isEmpty(accumulatedSelectors)) {
+    cb({});
+    return cssTree;
+  }
 
   result.selectors = _.sortBy(_.uniq(accumulatedSelectors), selectorSortFn);
 
@@ -82,7 +90,7 @@ function listSelectorsStandalone(fileGlob, opts, cb) {
 
 function selectorSortFn(selector) {
   var lowerNoPseudo = selector.split(':')[0].toLowerCase();
-  return (selector.match(/^[#\.\[]/)) ? lowerNoPseudo.substr(1) : lowerNoPseudo;
+  return (/^[#\.\[]/.test(selector)) ? lowerNoPseudo.substr(1) : lowerNoPseudo;
 }
 
 function processIncludes(selectorList, includes) {

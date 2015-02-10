@@ -4,7 +4,7 @@ var fs = require('fs');
 var test = require('tape');
 var postcss = require('postcss');
 var selectorProcessors = require('../lib/selectorProcessors');
-var listSimpleSelectors = require('..');
+var listSelectors = require('..');
 
 function getExpected(name) {
   return require('./fixtures/' + name + '.expected.js');
@@ -14,7 +14,7 @@ function processFixture(name, opts) {
   opts = opts || {};
   var result;
   var css = fs.readFileSync('test/fixtures/' + name + '.css', 'utf8');
-  postcss(listSimpleSelectors(opts, function(list) { result = list; }))
+  postcss(listSelectors(opts, function(list) { result = list; }))
     .process(css);
   return result;
 }
@@ -35,7 +35,11 @@ test('extractSimpleSelectors', function(t) {
   t.deepEqual(extract('[one].two#three'), ['[one]', '.two', '#three']);
   t.deepEqual(extract('a[href^="horse"]'), ['a', '[href^="horse"]']);
   t.deepEqual(extract('span[id="st#upid.hor*se"]'), ['span', '[id="st#upid.hor*se"]']);
-  t.deepEqual(extract('.one:not(.two)'), ['.one:not', '.two']);
+  t.deepEqual(extract('.one:not(.two)'), ['.one', '.two']);
+  t.deepEqual(extract(
+    '.uniques-graph .x.axis .tick:nth-child(14) line'),
+    ['.uniques-graph', '.x', '.axis', '.tick', 'line']
+  );
   t.end();
 });
 
@@ -118,14 +122,14 @@ test('standalone', function(t) {
 
 test('postcss plugin', function(t) {
   t.plan(2);
-  listSimpleSelectors('./test/fixtures/basic.css', function(standaloneResult) {
+  listSelectors('./test/fixtures/basic.css', function(standaloneResult) {
     t.deepEqual(
       processFixture('basic'),
       standaloneResult,
       'standalone output and postcss output match'
     );
   });
-  listSimpleSelectors(
+  listSelectors(
     './test/fixtures/basic.css',
     { include: ['ids', 'classes'] },
     function(standaloneResult) {
@@ -136,4 +140,9 @@ test('postcss plugin', function(t) {
       );
     }
   );
+});
+
+test('skip keyframes', function(t) {
+  t.deepEqual(processFixture('keyframes'), {});
+  t.end();
 });

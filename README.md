@@ -75,7 +75,7 @@ Use it as a standalone Node function. Feed it globs of files, (optional) options
 
 * **{string|string[]} globs** - Can be a single glob or an array of globs that work together. This is made possible by [multimatch](https://github.com/sindresorhus/multimatch); if you'd like more details about usage and expected matches, have a look at [the multimatch tests](https://github.com/sindresorhus/multimatch/blob/master/test.js).
 * **{object} [options]** - Optional options: see [Options](#options).
-* **{function} callback** - A callback function that will receive the generated list as an argument.
+* **{function} callback** - A callback function that will receive the generated list as an argument. *If no selectors are found, it will receive an empty object.*
 
 #### Example
 
