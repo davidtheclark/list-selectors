@@ -1,25 +1,25 @@
 module.exports = {
-  all: [
+  'selectors': [
     '*',
-    '.class',
-    '#id',
     '[attribute]',
-    'div',
-    '.class.class2',
-    '.class .class3',
-    '.class > .class4',
-    '.class + .class5',
-    '.class ~ .class6',
-    '.class7',
-    '#id2',
-    'span',
+    '.class',
     '.class:hover',
     '.class::before',
     '.class:first-child',
-    '.class:not(.class8)'
+    '.class:not(.class8)',
+    '.class + .class5',
+    '.class .class3',
+    '.class > .class4',
+    '.class ~ .class6',
+    '.class.class2',
+    '.class7',
+    'div',
+    '#id',
+    '#id2',
+    'span'
   ],
-  simpleSelectors: {
-    all: [
+  'simpleSelectors': {
+    'all': [
       '*',
       '[attribute]',
       '.class',
@@ -35,8 +35,11 @@ module.exports = {
       '#id2',
       'span'
     ],
-    attributes: ['[attribute]'],
-    classes: [
+    'ids': [
+      '#id',
+      '#id2'
+    ],
+    'classes': [
       '.class',
       '.class2',
       '.class3',
@@ -46,7 +49,12 @@ module.exports = {
       '.class7',
       '.class8'
     ],
-    ids: [ '#id', '#id2' ],
-    types: [ 'div', 'span' ]
+    'attributes': [
+      '[attribute]'
+    ],
+    'types': [
+      'div',
+      'span'
+    ]
   }
 };

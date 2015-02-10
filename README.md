@@ -4,49 +4,51 @@
 
 What do you want in life? Is it to generate a nicely organized list of all the selectors used in your CSS, showing
 
-- all the selectors *sequences* used anywhere, in the order of usage;
-- all the *simple selectors* extracted from those sequences, in alphabetical order;
-- those simple selectors broken out into *id*, *class*, *attribute*, and *type* selector categories (also alphabetical)?
+- all the unique *selectors* used anywhere, in alphabetical order;
+- all the unique *simple selectors* extracted from those sequences, in alphabetical order;
+- those unique simple selectors broken out into *id*, *class*, *attribute*, and *type* selector categories (also alphabetical)?
 
-That's probably what you want. And your dreams have been realized: this plugin does those things!
+Yes, that is probably what you want. And your dreams have been realized: this plugin does those things!
 
 It can be used as a standalone Node function, a CLI, or a [PostCSS](https://github.com/postcss/postcss) plugin -- so it's bound to fit into your workflow.
 
 ## What it Does
 
-PostCSS parses the stylesheet(s) so that `list-selectors` can aggregate a list of all the selector sequences used. Then it picks apart those sequences, extracts the simple selectors, sorts and categorizes them, and spits out an object -- with which you can do what you will.
+While PostCSS parses the stylesheet(s), `list-selectors` aggregates a list of all the selectors used. Then it alphabetizes the selectors, extracts the simple selectors, sorts and categorizes those, and spits out an object -- with which you can do what you will.
 
 Here's a breakdown of the output object:
 
 ```js
 // Your Selectors
+//
+// All the lists are **in alphabetical order** and **without reptition**,
+// unique values only.
+//
+// The ordering ignores the initial `.`, `#`, and `[` that distinguish selectors,
+// so you'll get `['#goo', '.faz', '[href="..."]']` in that order.
 {
-  all: [
-    // An array of all the selector SEQUENCES used in the input CSS,
-    // **in order of appearance**.
+  selectors: [
+    // An array of all the unique selectors used in the input CSS.
   ],
   simpleSelectors: {
     all: [
-      // An array of all the SIMPLE selectors used in the input CSS,
-      // **in alphabetical order**. These have been extracted from the
-      // selector sequences and stripped of pseudo-classes and pseudo-selectors.
-      //
-      // The ordering ignores the initial `.`, `#`, and `[` that distinguish selectors,
-      // so you'll get `['#goo', '.faz', '[href="..."]']` in that order. See?
+      // An array of all the unique SIMPLE selectors used in the input CSS.
+      // These have been extracted from the
+      // selectors and stripped of pseudo-classes and pseudo-selectors.
       //
       // This list will include the universal selector, `*`, if you use it.
     ],
     attributes: [
-      // An array of all the simple attribute selectors used, in alphabetical order.
+      // An array of all the unique attribute selectors used.
     ],
     classes: [
-      // An array of all the simple class selectors used, in alphabetical order.
+      // An array of all the unique class selectors used.
     ],
     ids: [
-      // An array of all the simple id selectors used, in alphabetical order.
+      // An array of all the unique id selectors used.
     ],
     types: [
-      // An array of all the simple type selectors used, in alphabetical order.
+      // An array of all the unique type selectors used.
     ]
   }
 }
@@ -59,33 +61,46 @@ We all have our own reasons for wanting tools like this. Often it's a matter of 
 - You want an overview of what's going on in some CSS. A nice organized list of all the selectors in play would no doubt help.
 - In CSS code-reviews, you want to ensure that selectors adhere to some established conventions (e.g. SUIT or BEM format, no ids, prefixed classes, whatever else). With this list, you can easily scan through all the selectors and assess conformance.
 - You want a quick look at how Person-or-Company X that you admire writes CSS selectors, names classes, etc. So feed their CSS (even minified) into one end of the tube, and get a selector list out the other end.
-- You want to write a script that compares the selectors your team has actually used against a list of selectors that you are allowing yourself. This plugin will give you the "actual" (to be compred to the "expected").
+- You want to write a script that compares the selectors your team has actually used against a list of selectors that you are allowing yourself. This plugin will give you the "actual" (which you could compare with the "expected").
 
 And so on.
 
 ## Usage
 
-### As a Standalone Function
+### listSelectors(globs[, options], callback)
 
-Feed it globs of files and a callback that will receive the selector list object.
+Use it as a standalone Node function. Feed it globs of files, (optional) options, and a callback that will receive the selector list object.
 
-You can feed it a single glob or an array of globs that will work together. This is made possible by [multimatch](https://github.com/sindresorhus/multimatch); if you'd like more details about usage and expected matches, have a look at [the multimatch tests](https://github.com/sindresorhus/multimatch/blob/master/test.js).
+* **{string|string[]} globs** - Can be a single glob or an array of globs that work together. This is made possible by [multimatch](https://github.com/sindresorhus/multimatch); if you'd like more details about usage and expected matches, have a look at [the multimatch tests](https://github.com/sindresorhus/multimatch/blob/master/test.js).
+* **{object} [options]** - Optional options: see [Options](#options).
+* **{function} callback** - A callback function that will receive the generated list as an argument.
+
+#### Example
 
 ```js
 var listSelectors = require('list-selectors');
 
-listSelectors(['style/**/*.css', '!style/normalize.css'], function(myList) {
-  console.log(myList);
-  // ... do some other things with your nice new selector list
-});
+listSelectors(
+  ['style/**/*.css', '!style/normalize.css'], // glob
+  { include: ['ids', 'classes'] }, // options
+  function(myList) { // callback
+    console.log(myList);
+    // ... do other things with your nice selector list
+  }
+);
 
 ```
 
 ### As a CLI
 
-As with the standalone function, you feed it globs of files. In this case, the output is converted to a string with `JSON.stringify()` and written to `stdout`. So you can read it in your terminal, or pipe it to a file or another process.
+As with the standalone function, you feed it globs of files and options. In this case, though, no callback: the output is converted to a string with `JSON.stringify()` and written to `stdout`. So you can read it in your terminal or pipe it to a file or another process.
 
-There is one option: `-p` or `--pretty`. This will add line breaks and tabs to make the JSON more legible, if your goal is to read it with human eyes.
+#### Flags
+
+* `-p` or `--pretty`: This will add line breaks and tabs to make the JSON more legible, if your goal is to read it with human eyes.
+* `-i` or `--include`: See [Options](#options).
+
+#### Example
 
 ```bash
 list-selectors style/**/*.css !style/normalize.css
@@ -93,38 +108,21 @@ list-selectors style/**/*.css !style/normalize.css
 list-selectors foo.css
 # {"all":[".horse","#donkey","[data-type='mule']"],"simpleSelectors":{"all":["[data-type='mule']","#donkey",".horse"],"ids":["#donkey"],"classes":[".horse"],"attributes":["[data-type='mule']"],"types":[]}}
 
-list-selectors foo.css -p
+list-selectors foo.css -p -i classes
 # {
-#     "all": [
-#         ".horse",
-#         "#donkey",
-#         "[data-type='mule']"
-#     ],
-#     "simpleSelectors": {
-#         "all": [
-#             "[data-type='mule']",
-#             "#donkey",
-#             ".horse"
-#         ],
-#         "ids": [
-#             "#donkey"
-#         ],
-#         "classes": [
-#             ".horse"
-#         ],
-#         "attributes": [
-#             "[data-type='mule']"
-#         ],
-#         "types": []
-#     }
+#     "classes": [
+#         ".horse"
+#     ]
 # }
 ```
 
 ### As PostCSS Plugin
 
-Consume it as a PostCSS plugin, in accordance with however you like to consume PostCSS plugins.
+Consume it as a PostCSS plugin, in accordance with your chosen method of consuming PostCSS plugins.
 
-When you use it, pass it a callback that will receive the output object. Then have your way with it.
+Pass it (optional options) and a callback that will receive the output object. Then have your way with it.
+
+#### Examples
 
 Straight PostCSS:
 ```js
@@ -133,13 +131,14 @@ var listSelectors = require('listSelectors');
 
 var result;
 var css = fs.readFileSync('foo.css', 'utf8');
-postcss(listSimpleSelectors(function(list) { result = list; }))
+var listOpts = { include: 'ids' };
+postcss(listSimpleSelectors(listOpts, function(list) { result = list; }))
   .process(css);
 console.log(result);
 // ... do other things with result
 ```
 
-Or with Gulp ;and [gulp-postcss](https://github.com/w0rm/gulp-postcss), you can just string it in there with your other plugins
+Or with Gulp and [gulp-postcss](https://github.com/w0rm/gulp-postcss), you can just string it in there with your other plugins.
 ```js
 var gulp = require('gulp');
 var gulpPostcss = require('gulp-postcss');
@@ -160,3 +159,18 @@ function doSomethingWithList(list) {
   // ... do other things
 }
 ```
+
+## Options
+
+### include {string|string[]}
+
+Only include a subset of lists in the output.
+
+Options:
+- `'selectors'`: Only the complete list of full selectors.
+- `'simpleSelectors'`: Only the complete list of simple selectors.
+- `'simple'`: Same as `'simpleSelectors'`.
+- `'attributes'`: Only attributes.
+- `'classes'`: Only classes.
+- `'ids'`: Only ids.
+- `'types'`: Only types.
