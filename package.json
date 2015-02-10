@@ -37,7 +37,7 @@
   },
   "devDependencies": {
     "eslint": "^0.13.0",
-    "lodash": "^3.0.1",
+    "lodash": "^3.0.0",
     "tape": "^3.0.0"
   },
   "dependencies": {

@@ -22,22 +22,17 @@ var SIMPLE_INCLUDES = [
 function listSelectors(/* args */) {
   var args = _.toArray(arguments);
   var firstArg = _.first(args);
-  var fileGlob = (!_.isPlainObject(firstArg) && !_.isFunction(firstArg))
-    ? firstArg
-    : false;
+  var fileGlob = (!_.isPlainObject(firstArg) && !_.isFunction(firstArg)) ? firstArg : false;
   var polyIndex = (fileGlob) ? 1 : 0;
   var mysteryArg = arguments[polyIndex];
   var opts = (_.isPlainObject(mysteryArg)) ? mysteryArg : {};
-  var cb = (_.isFunction(mysteryArg))
-    ? mysteryArg
-    : arguments[polyIndex + 1] || _.noop;
+  var cb = (_.isFunction(mysteryArg)) ? mysteryArg : arguments[polyIndex + 1] || _.noop;
 
 
-  // Standalone function requires an initial string argument,
-  // which is the file glob
+  // Standalone function is indicated by the initial file glob
   if (fileGlob) {
     listSelectorsStandalone(fileGlob, opts, cb);
-    return undefined;
+    return;
   }
 
   return _.partial(listSelectorsPostcss, opts, cb);
@@ -96,10 +91,11 @@ function processIncludes(selectorList, includes) {
 
   var result = _.reduce(includes, function(r, include) {
     if (_.contains(TOP_LEVEL_INCLUDES, include)) {
-      if (include === 'simple') {
-        include = 'simpleSelectors';
+      if (_.contains(['simple', 'simpleSelectors'], include)) {
+        r.simpleSelectors = selectorList.simpleSelectors.all;
+      } else {
+        r[include] = selectorList[include];
       }
-      r[include] = selectorList[include];
       return r;
     }
 

@@ -10,10 +10,11 @@ function getExpected(name) {
   return require('./fixtures/' + name + '.expected.js');
 }
 
-function processFixture(name) {
+function processFixture(name, opts) {
+  opts = opts || {};
   var result;
   var css = fs.readFileSync('test/fixtures/' + name + '.css', 'utf8');
-  postcss(listSimpleSelectors(function(list) { result = list; }))
+  postcss(listSimpleSelectors(opts, function(list) { result = list; }))
     .process(css);
   return result;
 }
@@ -63,7 +64,76 @@ test('reduceToSimpleSelectors', function(t) {
   t.end();
 });
 
-test('listSimpleSelectors', function(t) {
+test('standalone', function(t) {
   t.deepEqual(processFixture('basic'), getExpected('basic'));
+  t.deepEqual(
+    processFixture('basic', { include: 'ids' }),
+    { 'ids': ['#id', '#id2'] },
+    'ids only (include option is string)'
+  );
+  t.deepEqual(
+    processFixture('basic', { include: 'attributes' }),
+    { 'attributes': ['[attribute]'] },
+    'attributes only'
+  );
+  t.deepEqual(
+    processFixture('basic', { include: 'types' }),
+    { 'types': ['div', 'span'] },
+    'types only'
+  );
+  t.deepEqual(
+    processFixture('basic', { include: 'classes' }),
+    { 'classes': ['.class', '.class2', '.class3', '.class4', '.class5', '.class6', '.class7', '.class8'] },
+    'classes only'
+  );
+  t.deepEqual(
+    processFixture('basic', { include: ['ids'] }),
+    { 'ids': ['#id', '#id2'] },
+    'ids only (include option is array)'
+  );
+  t.deepEqual(
+    processFixture('basic', { include: ['ids', 'types'] }),
+    {
+      'ids': ['#id', '#id2'],
+      'types': ['div', 'span']
+    },
+    'ids and types only');
+  t.deepEqual(
+    processFixture('basic', { include: 'simple' }),
+    { simpleSelectors: getExpected('basic').simpleSelectors.all },
+    'simpleSelectors only'
+  );
+  t.deepEqual(
+    processFixture('basic', { include: 'simpleSelectors' }),
+    { simpleSelectors: getExpected('basic').simpleSelectors.all },
+    'simpleSelectors only'
+  );
+  t.deepEqual(
+    processFixture('basic', { include: 'selectors' }),
+    { selectors: getExpected('basic').selectors },
+    'full selectors only'
+  );
   t.end();
+});
+
+test('postcss plugin', function(t) {
+  t.plan(2);
+  listSimpleSelectors('./test/fixtures/basic.css', function(standaloneResult) {
+    t.deepEqual(
+      processFixture('basic'),
+      standaloneResult,
+      'standalone output and postcss output match'
+    );
+  });
+  listSimpleSelectors(
+    './test/fixtures/basic.css',
+    { include: ['ids', 'classes'] },
+    function(standaloneResult) {
+      t.deepEqual(
+        processFixture('basic', { include: ['ids', 'classes'] }),
+        standaloneResult,
+        'standalone output and postcss output match with include option'
+      );
+    }
+  );
 });
