@@ -97,6 +97,8 @@ listSelectors(
 
 As with the standalone function, you feed it globs of files and options. In this case, though, no callback: the output is converted to a string with `JSON.stringify()` and written to `stdout`. So you can read it in your terminal or pipe it to a file or another process.
 
+*Important note*: If you use `!` or other special characters in your file globs, make sure that you wrap the glob in quotation marks or else your terminal will get flummoxed. See the last example below.
+
 #### Flags
 
 * `-p` or `--pretty`: This will add line breaks and tabs to make the JSON more legible, if your goal is to read it with human eyes.
@@ -105,7 +107,6 @@ As with the standalone function, you feed it globs of files and options. In this
 #### Example
 
 ```bash
-list-selectors style/**/*.css !style/normalize.css
 
 list-selectors foo.css
 # {"all":[".horse","#donkey","[data-type='mule']"],"simpleSelectors":{"all":["[data-type='mule']","#donkey",".horse"],"ids":["#donkey"],"classes":[".horse"],"attributes":["[data-type='mule']"],"types":[]}}
@@ -116,6 +117,8 @@ list-selectors foo.css -p -i classes
 #         ".horse"
 #     ]
 # }
+
+list-selectors 'style/**/*.css' '!style/normalize.css'
 ```
 
 ### As PostCSS Plugin
@@ -177,3 +180,7 @@ Options:
 - `'classes'`: Only classes.
 - `'ids'`: Only ids.
 - `'types'`: Only types.
+
+## Caveats
+
+- Anything within parentheses will be ignored. One situation in which you might use a selector in parentheses is with `:not`, e.g. `.foo:not(.bar)` --- and in that case, `.bar` will not be included in the list (unless it's used elsewhere).

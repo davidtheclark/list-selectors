@@ -2,20 +2,24 @@
 
 var fs = require('fs');
 var test = require('tape');
+var _ = require('lodash');
 var postcss = require('postcss');
 var selectorProcessors = require('../lib/selectorProcessors');
 var listSelectors = require('..');
 
-function getExpected(name) {
+var getExpected = _.memoize(function(name) {
   return require('./fixtures/' + name + '.expected.js');
-}
+});
+
+var getFixture = _.memoize(function(name) {
+  return fs.readFileSync('test/fixtures/' + name + '.css', 'utf8');
+});
 
 function processFixture(name, opts) {
   opts = opts || {};
   var result;
-  var css = fs.readFileSync('test/fixtures/' + name + '.css', 'utf8');
   postcss(listSelectors(opts, function(list) { result = list; }))
-    .process(css);
+    .process(getFixture(name));
   return result;
 }
 
@@ -35,7 +39,7 @@ test('extractSimpleSelectors', function(t) {
   t.deepEqual(extract('[one].two#three'), ['[one]', '.two', '#three']);
   t.deepEqual(extract('a[href^="horse"]'), ['a', '[href^="horse"]']);
   t.deepEqual(extract('span[id="st#upid.hor*se"]'), ['span', '[id="st#upid.hor*se"]']);
-  t.deepEqual(extract('.one:not(.two)'), ['.one', '.two']);
+  t.deepEqual(extract('.one:not(.two)'), ['.one']);
   t.deepEqual(extract(
     '.uniques-graph .x.axis .tick:nth-child(14) line'),
     ['.uniques-graph', '.x', '.axis', '.tick', 'line']
@@ -72,34 +76,34 @@ test('standalone', function(t) {
   t.deepEqual(processFixture('basic'), getExpected('basic'));
   t.deepEqual(
     processFixture('basic', { include: 'ids' }),
-    { 'ids': ['#id', '#id2'] },
+    { 'ids': getExpected('basic').simpleSelectors.ids },
     'ids only (include option is string)'
   );
   t.deepEqual(
     processFixture('basic', { include: 'attributes' }),
-    { 'attributes': ['[attribute]'] },
+    { 'attributes': getExpected('basic').simpleSelectors.attributes },
     'attributes only'
   );
   t.deepEqual(
     processFixture('basic', { include: 'types' }),
-    { 'types': ['div', 'span'] },
+    { 'types': getExpected('basic').simpleSelectors.types },
     'types only'
   );
   t.deepEqual(
     processFixture('basic', { include: 'classes' }),
-    { 'classes': ['.class', '.class2', '.class3', '.class4', '.class5', '.class6', '.class7', '.class8'] },
+    { 'classes': getExpected('basic').simpleSelectors.classes },
     'classes only'
   );
   t.deepEqual(
     processFixture('basic', { include: ['ids'] }),
-    { 'ids': ['#id', '#id2'] },
+    { 'ids': getExpected('basic').simpleSelectors.ids },
     'ids only (include option is array)'
   );
   t.deepEqual(
     processFixture('basic', { include: ['ids', 'types'] }),
     {
-      'ids': ['#id', '#id2'],
-      'types': ['div', 'span']
+      'ids': getExpected('basic').simpleSelectors.ids,
+      'types': getExpected('basic').simpleSelectors.types
     },
     'ids and types only');
   t.deepEqual(
