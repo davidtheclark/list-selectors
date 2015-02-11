@@ -3,6 +3,7 @@
 var _ = require('lodash');
 var fs = require('fs');
 var globby = require('globby');
+var request = require('request');
 var postcss = require('postcss');
 var selectorProcessors = require('./lib/selectorProcessors');
 
@@ -27,7 +28,6 @@ function listSelectors(/* args */) {
   var mysteryArg = arguments[polyIndex];
   var opts = (_.isPlainObject(mysteryArg)) ? mysteryArg : {};
   var cb = (_.isFunction(mysteryArg)) ? mysteryArg : arguments[polyIndex + 1] || _.noop;
-
 
   // Standalone function is indicated by the initial file glob
   if (fileGlob) {
@@ -79,13 +79,31 @@ function listSelectorsPostcss(opts, cb, cssTree) {
 function listSelectorsStandalone(fileGlob, opts, cb) {
   var fullCss = '';
 
-  globby(fileGlob, function(err, filePaths) {
-    if (err) { throw err; }
-    filePaths.forEach(function(filePath) {
-      fullCss += fs.readFileSync(filePath, { encoding: 'utf8' });
+  if (_.startsWith(fileGlob, 'http')) {
+    processRemoteCss();
+  } else {
+    processLocalCss();
+  }
+
+  function processRemoteCss() {
+    var url = (_.isArray(fileGlob)) ? fileGlob[0] : fileGlob;
+    request(url, function(err, resp, body) {
+      if (err) { throw err; }
+      if (!err && resp.statusCode === 200) {
+        postcss(listSelectors(opts, cb)).process(body);
+      }
     });
-    postcss(listSelectors(opts, cb)).process(fullCss);
-  });
+  }
+
+  function processLocalCss() {
+    globby(fileGlob, function(err, filePaths) {
+      if (err) { throw err; }
+      filePaths.forEach(function(filePath) {
+        fullCss += fs.readFileSync(filePath, { encoding: 'utf8' });
+      });
+      postcss(listSelectors(opts, cb)).process(fullCss);
+    });
+  }
 }
 
 function selectorSortFn(selector) {

@@ -150,3 +150,12 @@ test('skip keyframes', function(t) {
   t.deepEqual(processFixture('keyframes'), {});
   t.end();
 });
+
+var remoteBasic = 'https://raw.githubusercontent.com/davidtheclark/list-selectors/master/test/fixtures/basic.css';
+
+test('remote', function(t) {
+  t.plan(1);
+  listSelectors(remoteBasic, function(result) {
+    t.deepEqual(result, getExpected('basic'));
+  });
+});

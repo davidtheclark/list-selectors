@@ -71,9 +71,9 @@ And so on.
 
 ### listSelectors(globs[, options], callback)
 
-Use it as a standalone Node function. Feed it globs of files, (optional) options, and a callback that will receive the selector list object.
+Use it as a standalone Node function. Feed it globs of files or a URL, (optional) options, and a callback that will receive the selector list object.
 
-* **{string|string[]} globs** - Can be a single glob or an array of globs that work together. This is made possible by [multimatch](https://github.com/sindresorhus/multimatch); if you'd like more details about usage and expected matches, have a look at [the multimatch tests](https://github.com/sindresorhus/multimatch/blob/master/test.js).
+* **{string|string[]} source** - Can be a single file glob, or an array of file globs that work together, or the URL of a remote CSS file. The array of file globs is made possible by [multimatch](https://github.com/sindresorhus/multimatch); so if you'd like more details about usage and expected matches, have a look at [the multimatch tests](https://github.com/sindresorhus/multimatch/blob/master/test.js).
 * **{object} [options]** - Optional options: see [Options](#options).
 * **{function} callback** - A callback function that will receive the generated list as an argument. *If no selectors are found, it will receive an empty object.*
 
@@ -95,9 +95,9 @@ listSelectors(
 
 ### As a CLI
 
-As with the standalone function, you feed it globs of files and options. In this case, though, no callback: the output is converted to a string with `JSON.stringify()` and written to `stdout`. So you can read it in your terminal or pipe it to a file or another process.
+As with the standalone function, you feed it globs of files and options; and you pass an array of globs to make [multimatch](https://github.com/sindresorhus/multimatch) patterns (*however*, if you use `!` or other special characters in your file globs, make sure that you wrap the glob in quotation marks or else your terminal will get flummoxed -- see the last example below); and you can pass a URL to a remote CSS file.
 
-*Important note*: If you use `!` or other special characters in your file globs, make sure that you wrap the glob in quotation marks or else your terminal will get flummoxed. See the last example below.
+The output is converted to a string with `JSON.stringify()` and written to `stdout`. So you can read it in your terminal or pipe it to a file or another process.
 
 #### Flags
 
@@ -118,6 +118,10 @@ list-selectors foo.css -p -i classes
 #     ]
 # }
 
+# Remote URL
+list-selectors https://www.npmjs.com/static/css/index.css
+
+# Using a ! -- notice the quotation marks
 list-selectors 'style/**/*.css' '!style/normalize.css'
 ```
 
