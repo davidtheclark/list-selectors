@@ -69,7 +69,7 @@ And so on.
 
 ## Usage
 
-### listSelectors(globs[, options], callback)
+### listSelectors(source[, options], callback)
 
 Use it as a standalone Node function. Feed it globs of files or a URL, (optional) options, and a callback that will receive the selector list object.
 
