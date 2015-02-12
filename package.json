@@ -41,6 +41,7 @@
     "tape": "^3.0"
   },
   "dependencies": {
+    "chalk": "^0.5.1",
     "globby": "^1.0",
     "minimist": "^1.0",
     "postcss": "^4.0",

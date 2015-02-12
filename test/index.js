@@ -159,3 +159,16 @@ test('remote', function(t) {
     t.deepEqual(result, getExpected('basic'));
   });
 });
+
+test('responds to mistakes', function(t) {
+  t.plan(3);
+  listSelectors('./test/fixtures/doesnotexist.css', function(result) {
+    t.deepEqual(result, {}, 'nonexistant local source returns {}');
+  });
+  listSelectors('http://google.com/doesnotexist.css', function(result) {
+    t.deepEqual(result, {}, 'nonexistant local source returns {}');
+  });
+  listSelectors('./test/fixtures/empty.css', function(result) {
+    t.deepEqual(result, {}, 'empty stylesheet returns {}');
+  });
+});
