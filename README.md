@@ -1,6 +1,4 @@
-[![Build Status](https://travis-ci.org/davidtheclark/list-selectors.svg?branch=master)](https://travis-ci.org/davidtheclark/list-selectors)
-
-# list-selectors
+# list-selectors [![Build Status](https://travis-ci.org/davidtheclark/list-selectors.svg?branch=master)](https://travis-ci.org/davidtheclark/list-selectors)
 
 What do you want in life? Is it to generate a nicely organized list of all the selectors used in your CSS, showing
 
@@ -67,7 +65,7 @@ And so on.
 
 ## Usage
 
-### listSelectors(globs[, options], callback)
+### listSelectors(source[, options], callback)
 
 Use it as a standalone Node function. Feed it globs of files or a URL, (optional) options, and a callback that will receive the selector list object.
 
