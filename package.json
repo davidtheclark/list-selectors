@@ -9,7 +9,7 @@
     "list-selectors": "./bin.js"
   },
   "license": "MIT",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "List the selectors used in your CSS. Use as a standalone function, CLI, or PostCSS plugin.",
   "homepage": "https://github.com/davidtheclark/list-selectors",
   "repository": {
@@ -37,12 +37,12 @@
   },
   "devDependencies": {
     "eslint": "^0.13",
-    "lodash": "^3.0",
     "tape": "^3.0"
   },
   "dependencies": {
     "chalk": "^0.5.1",
     "globby": "^1.0",
+    "lodash": "^3.0",
     "minimist": "^1.0",
     "postcss": "^4.0",
     "request": "^2.0"
