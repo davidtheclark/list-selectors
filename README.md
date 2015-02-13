@@ -10,6 +10,12 @@ Yes, that is probably what you want. And your dreams have been realized: this pl
 
 It can be used as a standalone Node function, a CLI, or a [PostCSS](https://github.com/postcss/postcss) plugin -- so it's bound to fit into your workflow.
 
+## Installation
+
+```
+npm install list-selectors
+```
+
 ## What it Does
 
 While PostCSS parses the stylesheet(s), `list-selectors` aggregates a list of all the selectors used. Then it alphabetizes the selectors, extracts the simple selectors, sorts and categorizes those, and spits out an object -- with which you can do what you will.
