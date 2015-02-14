@@ -166,7 +166,7 @@ test('responds to mistakes', function(t) {
     t.deepEqual(result, {}, 'nonexistant local source returns {}');
   });
   listSelectors('http://google.com/doesnotexist.css', function(result) {
-    t.deepEqual(result, {}, 'nonexistant local source returns {}');
+    t.deepEqual(result, {}, 'nonexistant remote source returns {}');
   });
   listSelectors('./test/fixtures/empty.css', function(result) {
     t.deepEqual(result, {}, 'empty stylesheet returns {}');
