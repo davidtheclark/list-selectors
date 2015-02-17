@@ -121,6 +121,11 @@ test('standalone', function(t) {
     { selectors: getExpected('basic').selectors },
     'full selectors only'
   );
+  t.deepEqual(
+    processFixture('readme'),
+    getExpected('readme'),
+    'readme example'
+  );
   t.end();
 });
 
