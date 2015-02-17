@@ -115,7 +115,7 @@ And so on.
 
 Use it as a standalone Node function. Feed it globs of files or a URL, (optional) options, and a callback that will receive the selector list object.
 
-* **{string|string[]} **source** - Can be a single file glob, or an array of file globs that work together, or the URL of a remote CSS file. URLs are identified by an opening `http`, so don't forget that. The array of file globs is made possible by [multimatch](https://github.com/sindresorhus/multimatch); if you'd like more details about usage and expected matches, have a look at [the multimatch tests](https://github.com/sindresorhus/multimatch/blob/master/test.js).
+* **{string|string[]} source** - Can be a single file glob, or an array of file globs that work together, or the URL of a remote CSS file. URLs are identified by an opening `http`, so don't forget that. The array of file globs is made possible by [multimatch](https://github.com/sindresorhus/multimatch); if you'd like more details about usage and expected matches, have a look at [the multimatch tests](https://github.com/sindresorhus/multimatch/blob/master/test.js).
 * **{object} [options]** - Optional options: see [Options](#options).
 * **{function} callback** - A callback function that will receive the generated list as an argument. If no selectors are found, it will receive an empty object.
 
