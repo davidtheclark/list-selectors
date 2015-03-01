@@ -1,5 +1,8 @@
 # Changelog
 
+## v0.1.2
+- Updated dependencies.
+
 ## v0.1.1
 - Moved lodash from devDependency to true dependency.
 
