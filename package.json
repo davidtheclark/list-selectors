@@ -36,15 +36,15 @@
     "test": "npm run lint && tape test"
   },
   "devDependencies": {
-    "eslint": "0.15.1",
-    "tape": "3.5.0"
+    "eslint": "0.18.0",
+    "tape": "4.0.0"
   },
   "dependencies": {
     "chalk": "^1.0",
-    "globby": "^1.0",
+    "globby": "^2.0",
     "lodash": "^3.0",
     "minimist": "^1.0",
-    "postcss": "^4.0",
+    "postcss": "4.0.x",
     "request": "^2.0"
   }
 }
