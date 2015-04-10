@@ -44,7 +44,8 @@
     "globby": "^2.0",
     "lodash": "^3.0",
     "minimist": "^1.0",
-    "postcss": "4.0.x",
+    "postcss": "^4.1.0",
+    "postcss-log-warnings": "^0.1.2",
     "request": "^2.0"
   }
 }

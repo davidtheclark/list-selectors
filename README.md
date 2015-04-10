@@ -39,7 +39,7 @@ div#antipattern:nth-child(3).horsehair [id="ding"] { color: yellow; }
 //
 // The ordering ignores initial characaters that distinguish selectors.
 // It also ignores capitalization. So you'd get
-// `['#goo', '.faz', '.Freedom', '[href="..."]']` in that order. 
+// `['#goo', '.faz', '.Freedom', '[href="..."]']` in that order.
 {
   selectors: [
     // The selectors used in the input CSS.
@@ -171,6 +171,12 @@ list-selectors "style/**/*.css" "!style/normalize.css"
 
 Consume it as a [PostCSS](https://github.com/postcss/postcss) plugin, in accordance with your chosen method of consuming PostCSS plugins.
 
+Just use the `plugin` method:
+
+```js
+var listSelectorPlugin = require('list-selectors').plugin;
+```
+
 Pass it (optional) options and a callback that will receive the output object. Then have your way with it.
 
 #### Examples
@@ -180,20 +186,20 @@ With Gulp and [gulp-postcss](https://github.com/w0rm/gulp-postcss), you can just
 ```js
 var gulp = require('gulp');
 var gulpPostcss = require('gulp-postcss');
-var listSelectors = require('listSelectors');
+var listSelectorsPlugin = require('listSelectors').plugin;
 var customProperties = require('postcss-custom-properties');
 
 gulp.task('analyzeCss', function() {
   return gulp.src(['style/**/*.css', '!style/normalize.css'])
     .pipe(postcss([
       customProperties(),
-      listSelectors(doSomethingWithList)
+      listSelectorsPlugin(doSomethingWithList)
     ]))
     .pipe(gulp.dest('./dest'));
 });
 
-function doSomethingWithList(list) {
-  console.log(list);
+function doSomethingWithList(mySelectorList) {
+  console.log(mySelectorList);
   // ... do other things
 }
 ```
@@ -202,15 +208,17 @@ Straight PostCSS:
 
 ```js
 var postcss = require('postcss');
-var listSelectors = require('listSelectors');
+var listSelectorsPlugin = require('listSelectors').plugin;
 
-var result;
+var mySelectorList;
 var css = fs.readFileSync('foo.css', 'utf8');
 var listOpts = { include: 'ids' };
-postcss(listSimpleSelectors(listOpts, function(list) { result = list; }))
-  .process(css);
-console.log(result);
-// ... do other things with result
+postcss(listSelectorsPlugin(listOpts, function(list) { mySelectorList = list; }))
+  .process(css)
+  .then(function() {
+    console.log(mySelectorList);
+    // ... do other things with result
+  });
 ```
 
 
