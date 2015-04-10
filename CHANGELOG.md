@@ -1,5 +1,8 @@
 # Changelog
 
+## v0.2.0
+- Major refactor, including upgrade to PostCSS 4.1.
+
 ## v0.1.2
 - Updated dependencies.
 

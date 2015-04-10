@@ -10,6 +10,8 @@ Yes, that is probably what you want. And your dreams have been realized: this pl
 
 It can be used as a standalone Node function, a CLI, or a [PostCSS](https://github.com/postcss/postcss) plugin — so it's bound to fit into your workflow.
 
+*The latest version should be used as a PostCSS plugin only with PostCSS v4.1+.*
+
 ## Installation
 
 ```
