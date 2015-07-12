@@ -4,10 +4,8 @@ var fs = require('fs');
 var test = require('tape');
 var _ = require('lodash');
 var postcss = require('postcss');
-var logWarnings = require('postcss-log-warnings');
+var reporter = require('postcss-reporter');
 var listSelectors = require('../index.js');
-
-require('./processors');
 
 var getExpected = _.memoize(function(name) {
   return require('./fixtures/' + name + '.expected.js');
@@ -21,7 +19,7 @@ function processFixture(name, opts, cb) {
   var fixtureList;
   postcss()
     .use(listSelectors.plugin(opts, function(list) { fixtureList = list; }))
-    .use(logWarnings({ plugins: ['list-selectors'] }))
+    .use(reporter({ plugins: ['list-selectors'] }))
     .process(getFixture(name))
     .then(function() {
       cb(fixtureList);
@@ -94,7 +92,7 @@ test('postcss plugin', function(t) {
   });
 });
 
-test('postcss plugin', function(t) {
+test('standalone function', function(t) {
   t.plan(2);
 
   listSelectors('./test/fixtures/basic.css', function(standaloneResult) {

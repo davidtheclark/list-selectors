@@ -1,5 +1,8 @@
 # Changelog
 
+## v0.3.0
+- Major refactor to use `postcss-selector-parser`.
+
 ## v0.2.0
 - Major refactor, including upgrade to PostCSS 4.1.
 

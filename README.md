@@ -238,7 +238,3 @@ Possible values are:
 - `'classes'`: Only classes.
 - `'ids'`: Only ids.
 - `'types'`: Only types.
-
-## Caveats
-
-- Anything within parentheses will be ignored. One situation in which you might use a selector in parentheses is with `:not`, e.g. `.foo:not(.bar)` — and in that case, `.bar` will not be included in the list (unless it's used elsewhere).

@@ -29,6 +29,7 @@ module.exports = {
       '.class5',
       '.class6',
       '.class7',
+      '.class8',
       'div',
       '#id',
       '#id2',
@@ -45,7 +46,8 @@ module.exports = {
       '.class4',
       '.class5',
       '.class6',
-      '.class7'
+      '.class7',
+      '.class8'
     ],
     'attributes': [
       '[attribute]'
