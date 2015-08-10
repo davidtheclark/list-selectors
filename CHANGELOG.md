@@ -1,5 +1,8 @@
 # Changelog
 
+## v1.0.0
+- Update dependencies.
+
 ## v0.3.0
 - Major refactor to use `postcss-selector-parser`.
 
