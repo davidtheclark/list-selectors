@@ -9,7 +9,7 @@
     "list-selectors": "./bin.js"
   },
   "license": "MIT",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "List the selectors used in your CSS. Use as a standalone function, CLI, or PostCSS plugin.",
   "homepage": "https://github.com/davidtheclark/list-selectors",
   "repository": {
@@ -36,16 +36,16 @@
     "test": "npm run lint && tape test"
   },
   "devDependencies": {
-    "eslint": "1.0.0",
-    "tape": "4.0.3"
+    "eslint": "1.2.1",
+    "tape": "4.2.0"
   },
   "dependencies": {
     "chalk": "^1.0",
     "globby": "^2.0",
     "lodash": "^3.0",
     "minimist": "^1.0",
-    "postcss": "^4.1.0",
-    "postcss-reporter": "^0.4.0",
+    "postcss": "^5.0.2",
+    "postcss-reporter": "^1.0",
     "postcss-selector-parser": "^1.1.2",
     "request": "^2.0"
   }

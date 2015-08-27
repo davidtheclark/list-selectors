@@ -1,5 +1,8 @@
 # Changelog
 
+## v2.0.0
+- Upgrade to PostCSS 5.
+
 ## v1.0.0
 - Update dependencies.
 

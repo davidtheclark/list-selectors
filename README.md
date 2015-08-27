@@ -18,6 +18,8 @@ It can be used as a standalone Node function, a CLI, or a [PostCSS](https://gith
 npm install list-selectors
 ```
 
+Version 2+ is compatible with PostCSS 5. (Earlier versions are compatible with PostCSS 4.)
+
 ## What it Does
 
 While PostCSS parses the input stylesheet(s), `list-selectors` aggregates a list of all the selectors used. Then it alphabetizes them, extracts the simple selectors, sorts and categorizes those, and spits out an object — with which you can do what you will (some ideas [below](#why)).
