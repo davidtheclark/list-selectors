@@ -42,7 +42,7 @@
   "dependencies": {
     "chalk": "^1.0",
     "globby": "^2.0",
-    "lodash": "^3.0",
+    "lodash": "^4.17",
     "minimist": "^1.0",
     "postcss": "^5.0.2",
     "postcss-reporter": "^1.0",
