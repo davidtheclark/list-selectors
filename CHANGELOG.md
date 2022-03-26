@@ -1,5 +1,8 @@
 # Changelog
 
+## v2.0.1
+- Upgrade lodash dependency to 4.17.
+
 ## v2.0.0
 - Upgrade to PostCSS 5.
 

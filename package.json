@@ -9,7 +9,7 @@
     "list-selectors": "./bin.js"
   },
   "license": "MIT",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "List the selectors used in your CSS. Use as a standalone function, CLI, or PostCSS plugin.",
   "homepage": "https://github.com/davidtheclark/list-selectors",
   "repository": {
