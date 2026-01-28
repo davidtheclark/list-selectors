@@ -1,4 +1,4 @@
-# list-selectors [![Build Status](https://travis-ci.org/davidtheclark/list-selectors.svg?branch=master)](https://travis-ci.org/davidtheclark/list-selectors)
+# list-selectors
 
 What do you want in life? Is it to generate a nicely organized list of all the selectors used in your CSS, showing
 
